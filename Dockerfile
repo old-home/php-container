@@ -24,6 +24,7 @@ RUN set -x \
     libicu-dev \
     libidn11-dev \
     libidn2-0-dev \
+    libgmp-dev \
   ;
 
 # Install PHP extensions
@@ -34,10 +35,15 @@ RUN docker-php-ext-install \
     simplexml \
     xml \
     mbstring \
+    sockets \
+    gmp \
   ;
-RUN pecl install xdebug \
-    && pecl install ast raphf && docker-php-ext-enable ast raphf \
-    && pecl install pecl_http && docker-php-ext-enable http
+RUN pecl install xdebug event \
+    && pecl install ast && docker-php-ext-enable ast \
+    && pecl install raphf && docker-php-ext-enable raphf \
+    && docker-php-ext-enable xdebug \
+    && docker-php-ext-enable event --ini-name zz-event.ini \
+    ;
 
 # Remove unrequired packages
 RUN apt-get remove -y wget \
@@ -47,7 +53,6 @@ RUN apt-get remove -y wget \
   ;
 
 RUN chmod +x /usr/local/bin/entrypoint.sh \
-    && echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20230831/xdebug.so" >> /usr/local/etc/php/php.ini \
     && echo "xdebug.mode=coverage" >> /usr/local/etc/php/php.ini \
   ;
 

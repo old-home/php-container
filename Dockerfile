@@ -37,6 +37,7 @@ RUN docker-php-ext-install \
     mbstring \
     sockets \
     gmp \
+    pcntl \
   ;
 RUN pecl install xdebug event \
     && pecl install ast && docker-php-ext-enable ast \

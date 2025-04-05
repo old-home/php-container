@@ -29,6 +29,7 @@ RUN set -x \
 
 # Install PHP extensions
 RUN docker-php-ext-install \
+    bcmath \
     intl \
     pdo_pgsql \
     opcache \
